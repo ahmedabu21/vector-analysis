@@ -1,23 +1,21 @@
-#Created by Karan, Ahmed, Oliee | 2025
-#Iteration #4
 import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import *
 from matplotlib.figure import Figure 
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,  
-NavigationToolbar2Tk) 
-
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 UI = Tk()
 UI.title('Vector Analysis!')
-UI.geometry("500x500")
-plot_button = Button(master=UI, height=5, width=20, text = "plot")
-x_label= Label(master=UI, text='Enter X-Component: ')
-y_label = Label(master=UI, text='Enter Y-Component: ')
-z_label = Label(master=UI, text='Enter Z Component: ')
+UI.geometry("600x600")
+
+# UI Components
+x_label = Label(UI, text='Enter X-Component: ')
+y_label = Label(UI, text='Enter Y-Component: ')
+z_label = Label(UI, text='Enter Z-Component: ')
 x_entry = Entry(UI, width=10, borderwidth=3)
 y_entry = Entry(UI, width=10, borderwidth=3)
 z_entry = Entry(UI, width=10, borderwidth=3)
+
 x_label.grid(row=0, column=0, padx=5)
 x_entry.grid(row=0, column=1, padx=5)
 y_label.grid(row=0, column=2, padx=5)
@@ -25,7 +23,8 @@ y_entry.grid(row=0, column=3, padx=5)
 z_label.grid(row=0, column=4, padx=5)
 z_entry.grid(row=0, column=5, padx=5)
 
-
+magnitude_label = Label(UI, text='Magnitude: N/A', font=("Arial", 12))
+magnitude_label.grid(row=2, column=0, columnspan=6, pady=5)
 
 class Vector:
     def __init__(self):
@@ -33,47 +32,62 @@ class Vector:
         self.vector_plot = self.fig.add_subplot(111, projection='3d')
         
         self.canvas = FigureCanvasTkAgg(self.fig, master=UI)
-        self.canvas.get_tk_widget().grid(row=1, column=0, columnspan=6, pady=20)    # Move plot below inputs
+        self.canvas.get_tk_widget().grid(row=3, column=0, columnspan=6, pady=20)  
 
     def display(self):
-        try:
-            x_component = float(x_entry.get())
-            y_component = float(y_entry.get())
-            z_component = float(z_entry.get())
+        try:    
+            self.x_component = float(x_entry.get())
+            self.y_component = float(y_entry.get())
+            self.z_component = float(z_entry.get())
         except ValueError:
             print("Invalid input! Please enter numeric values.")
             return
 
-    # Clear previous figure memory usage
-        plt.close('all')
+        self.vector_plot.clear()  # Clear the previous plot instead of creating a new figure
 
-    # Clear the previous plot
-        self.vector_plot.clear()
-    
-    # Plot the vector
-        self.vector_plot.quiver(0, 0, 0, x_component, y_component, z_component, color='r', arrow_length_ratio=0.1)
-    
-    # Label axes
+        max_value = max(abs(self.x_component), abs(self.y_component), abs(self.z_component))
+
+        # Draw Axes
+        self.vector_plot.plot([-max_value, max_value], [0, 0], [0, 0], color='black', lw=2, label='X-Axis')
+        self.vector_plot.plot([0, 0], [-max_value, max_value], [0, 0], color='blue', lw=2, label='Y-Axis')
+        self.vector_plot.plot([0, 0], [0, 0], [-max_value, max_value], color='red', lw=2, label='Z-Axis')
+
+        # Plot Vector
+        num_points = int(abs(self.x_component) + abs(self.y_component) + abs(self.z_component))
+        x = np.linspace(0, self.x_component, num_points)
+        y = np.linspace(0, self.y_component, num_points)
+        z = np.linspace(0, self.z_component, num_points)
+        self.vector_plot.plot(x, y, z, c='r', marker='o', label='Vector')
+
+        # XY, YZ, and XZ Planes
+        X = np.linspace(-max_value, max_value, 10)
+        Y, Z = np.meshgrid(X, X)
+        self.vector_plot.plot_surface(np.zeros_like(Y), Y, Z, color='grey', alpha=0.3)
+        self.vector_plot.plot_surface(X, np.zeros_like(X), Z, color='grey', alpha=0.3)
+        self.vector_plot.plot_surface(X, Y, np.zeros_like(X), color='grey', alpha=0.3)
+
+        # Set Labels
         self.vector_plot.set_xlabel('X Component')
         self.vector_plot.set_ylabel('Y Component')
         self.vector_plot.set_zlabel('Z Component')
+        self.vector_plot.legend()
 
-    # Redraw the canvas
+        # Update Canvas
         self.canvas.draw()
 
-        
-       
+        # Update Magnitude Label
+        self.magnitude()
+
+    def magnitude(self):
+        magnitude = np.sqrt(self.x_component**2 + self.y_component**2 + self.z_component**2)
+        magnitude_label.config(text=f'Magnitude: {magnitude:.2f}')
+
 vector_instance = Vector()
+
 plot_button = Button(master=UI, text="Plot", height=2, width=10, command=vector_instance.display)
-plot_button.grid(row=1, column=0, columnspan=6, pady=20)  
-
-
-
+plot_button.grid(row=1, column=0, columnspan=6, pady=10)
 
 UI.mainloop()
-
-    
-
 
 
 # class Vector:
@@ -83,14 +97,14 @@ UI.mainloop()
 #         self.z = z
 
 
-#     @classmethod
-#     def from_magnitude_direction(cls, magnitude, direction):
+    # @classmethod
+    # def from_magnitude_direction(cls, magnitude, direction):
 
-#         dx, dy, dz = direction
-#         norm = np.sqrt(dx**2 + dy**2 + dz**2)
-#         unit_vector = (dx / norm, dy / norm, dz / norm)
-#         x, y, z = magnitude * np.array(unit_vector)
-#         return cls(x, y, z)
+    #     dx, dy, dz = direction
+    #     norm = np.sqrt(dx**2 + dy**2 + dz**2)
+    #     unit_vector = (dx / norm, dy / norm, dz / norm)
+    #     x, y, z = magnitude * np.array(unit_vector)
+    #     return cls(x, y, z)
 
    
 
