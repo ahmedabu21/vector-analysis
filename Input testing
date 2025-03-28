@@ -1,0 +1,63 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from tkinter import *
+from matplotlib.figure import Figure 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk) 
+
+
+UI = Tk()
+UI.title('Vector Analysis!')
+UI.geometry("500x300")
+name = Entry(UI, width=10, borderwidth=3) #enter text box
+name.place(x=125, y=260) #moves 
+x2 = int(name.get())
+
+###testtttting shi
+def getInX():
+    userIn=int(name.get())
+    print(userIn)
+    return userIn
+print(x2)
+class Vector:
+    def __init__(self, x_component, y_component, z_component):
+        self.x_component = x_component
+        self.y_component = y_component
+        self.z_component = z_component
+        # self.button = Button(master=UI,height=5, width=20, text="Plot")
+        # self.label1 = Label(master=UI, text='Enter X-Component: ')
+        # self.label2 = Label(master=UI, text='Enter Y-Component: ')
+        # self.label3 = Label(master=UI, text='Enter Z Component: ')
+    
+    def display(self):
+       fig = plt.figure()
+       vector_plot = fig.add_subplot(111, projection='3d')  # this line just enables 3D plotting
+       vector_plot.plot(self.x_component, self.y_component, self.z_component, c='r', marker='o')
+       vector_plot.set_xlabel('X Component')
+       vector_plot.set_ylabel('Y Component')
+       vector_plot.set_zlabel('Z Component')
+       plt.show()
+
+       canvas = FigureCanvasTkAgg(fig, master = UI)
+       canvas.draw()
+       canvas.get_tk_widget().pack() 
+
+def askUserY():
+    yIn = float(input("Enter direction y component: "))
+    return yIn
+def askUserZ():
+    zIn=float(input("Enter direction z component: "))
+    return zIn
+
+# x=askUserX()
+y=askUserY()
+z=askUserZ()     
+v1 = Vector(x2,y,z)
+
+plotButton = Button(master=UI, text="Plot!", command=getInX())
+plotButton.place(x=150,y=50)
+label1.place(x=75, y=260)
+
+label2.pack()
+label3.pack()
+v1.display()
+UI.mainloop()
