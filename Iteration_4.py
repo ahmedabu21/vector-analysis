@@ -11,12 +11,13 @@ UI = Tk()
 UI.title('Vector Analysis!')
 UI.geometry("500x300")
 plot_button = Button(master=UI, height=5,    width=20, text = "plot")
-
+button = Button(master=UI,height=5, width=20, text="Plot")
 class Vector:
     def __init__(self, x_component, y_component, z_component):
         self.x_component = x_component
         self.y_component = y_component
         self.z_component = z_component
+        self.button = Button(master=UI,height=5, width=20, text="Plot")
     
     def display(self):
        fig = plt.figure()
@@ -32,15 +33,16 @@ class Vector:
        canvas.get_tk_widget().pack() 
        
         
-        
-v1 = Vector(3, 4, 5)
+x_component = float(input("Enter direction x component: "))
+y_component = float(input("Enter direction y component: "))
+z_component = float(input("Enter direction z component: "))        
+v1 = Vector(x_component, y_component, z_component)
 
-plot_button = Button(master=UI, height=5, width=20, text="Plot", command=v1.display)
 plot_button.pack()
 v1.display()
 UI.mainloop()
 
-
+    
 
 
 
