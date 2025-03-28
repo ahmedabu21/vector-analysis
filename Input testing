@@ -1,63 +1,85 @@
+#Created by Karan, Ahmed, Oliee | 2025
+#Iteration #4
 import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import *
 from matplotlib.figure import Figure 
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk) 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,  
+NavigationToolbar2Tk) 
 
 
 UI = Tk()
 UI.title('Vector Analysis!')
-UI.geometry("500x300")
-name = Entry(UI, width=10, borderwidth=3) #enter text box
-name.place(x=125, y=260) #moves 
-x2 = int(name.get())
+UI.geometry("500x500")
+x_label= Label(master=UI, text='Enter X-Component: ')
+y_label = Label(master=UI, text='Enter Y-Component: ')
+z_label = Label(master=UI, text='Enter Z Component: ')
+x_entry = Entry(UI, width=10, borderwidth=3)
+y_entry = Entry(UI, width=10, borderwidth=3)
+z_entry = Entry(UI, width=10, borderwidth=3)
+x_label.grid(row=0, column=0, padx=5)
+x_entry.grid(row=0, column=1, padx=5)
+y_label.grid(row=0, column=2, padx=5)
+y_entry.grid(row=0, column=3, padx=5)
+z_label.grid(row=0, column=4, padx=5)
+z_entry.grid(row=0, column=5, padx=5)
 
-###testtttting shi
-def getInX():
-    userIn=int(name.get())
-    print(userIn)
-    return userIn
-print(x2)
+
+
 class Vector:
-    def __init__(self, x_component, y_component, z_component):
-        self.x_component = x_component
-        self.y_component = y_component
-        self.z_component = z_component
-        # self.button = Button(master=UI,height=5, width=20, text="Plot")
-        # self.label1 = Label(master=UI, text='Enter X-Component: ')
-        # self.label2 = Label(master=UI, text='Enter Y-Component: ')
-        # self.label3 = Label(master=UI, text='Enter Z Component: ')
-    
+    def __init__(self):
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.vector_plot = self.fig.add_subplot(111, projection='3d')
+        
+        self.canvas = FigureCanvasTkAgg(self.fig, master=UI)
+        self.canvas.get_tk_widget().grid(row=1, column=0, columnspan=6, pady=20)    # Move plot below inputs
+ 
     def display(self):
-       fig = plt.figure()
-       vector_plot = fig.add_subplot(111, projection='3d')  # this line just enables 3D plotting
-       vector_plot.plot(self.x_component, self.y_component, self.z_component, c='r', marker='o')
-       vector_plot.set_xlabel('X Component')
-       vector_plot.set_ylabel('Y Component')
-       vector_plot.set_zlabel('Z Component')
-       plt.show()
+        try:
+            xCom = float(x_entry.get())
+            yCom = float(y_entry.get())
+            zCom = float(z_entry.get())
+        except ValueError:
+            print("Invalid input! Please enter numeric values.")
+            return
 
-       canvas = FigureCanvasTkAgg(fig, master = UI)
-       canvas.draw()
-       canvas.get_tk_widget().pack() 
+    # Clear previous figure memory usage
+        plt.close('all')
 
-def askUserY():
-    yIn = float(input("Enter direction y component: "))
-    return yIn
-def askUserZ():
-    zIn=float(input("Enter direction z component: "))
-    return zIn
+    # Clear the previous plot
+        self.vector_plot.clear()
+    
+    # Plot the vector
+        self.vector_plot.quiver(0, 0, 0, xCom, yCom, zCom, color='r', arrow_length_ratio=0.1)
+    
+    # Label axes
+        self.vector_plot.set_xlabel('X Component')
+        self.vector_plot.set_ylabel('Y Component')
+        self.vector_plot.set_zlabel('Z Component')
 
-# x=askUserX()
-y=askUserY()
-z=askUserZ()     
-v1 = Vector(x2,y,z)
+    # Redraw the canvas
+        self.canvas.draw()
+def addVectors(vector1,vector2):
+    newX = vector1.xCom + vector2.xCom
+    newY= vector1.yCom + vector2.yCom
+    newZ = vector1.zCom + vector2.zCom
+    return Vector(newX, newY, newZ)
+        
+       
+vector_instance = Vector()
+plot_button = Button(master=UI, text="Plot", height=2, width=10, command=vector_instance.display)
+plot_button.grid(row=2, column=0, columnspan=6, pady=20)  
+addButt = Button(master=UI,text="Add",height=2, width=10, command=addVectors)
+addButt.grid(row=2, column=2, columnspan=6, pady=20)
+subButt = Button(master=UI,text="Subtract",height=2, width=10)#add command)
+subButt.grid(row=2, column=4, columnspan=6, pady=20)
+dotButt = Button(master=UI,text="Dot Product",height=2, width=10)
+dotButt.grid(row=4, column=1, columnspan=6, pady=20)
+crossButt = Button(master=UI,text="Cross Product",height=2, width=10)
+crossButt.grid(row=4, column=3, columnspan=6, pady=20)
 
-plotButton = Button(master=UI, text="Plot!", command=getInX())
-plotButton.place(x=150,y=50)
-label1.place(x=75, y=260)
 
-label2.pack()
-label3.pack()
-v1.display()
 UI.mainloop()
+
+    
+
