@@ -11,13 +11,19 @@ UI = Tk()
 UI.title('Vector Analysis!')
 UI.geometry("500x300")
 plot_button = Button(master=UI, height=5,    width=20, text = "plot")
-button = Button(master=UI,height=5, width=20, text="Plot")
+label1 = Label(master=UI, text='Enter X-Component: ')
+label2 = Label(master=UI, text='Enter Y-Component: ')
+label3 = Label(master=UI, text='Enter Z Component: ')
+name = Entry(UI, width=10, borderwidth=3)
 class Vector:
     def __init__(self, x_component, y_component, z_component):
         self.x_component = x_component
         self.y_component = y_component
         self.z_component = z_component
-        self.button = Button(master=UI,height=5, width=20, text="Plot")
+        # self.button = Button(master=UI,height=5, width=20, text="Plot")
+        # self.label1 = Label(master=UI, text='Enter X-Component: ')
+        # self.label2 = Label(master=UI, text='Enter Y-Component: ')
+        # self.label3 = Label(master=UI, text='Enter Z Component: ')
     
     def display(self):
        fig = plt.figure()
@@ -39,6 +45,11 @@ z_component = float(input("Enter direction z component: "))
 v1 = Vector(x_component, y_component, z_component)
 
 plot_button.pack()
+label1.place(x=75, y=260)
+name.place(x=125, y=260)
+
+label2.pack()
+label3.pack()
 v1.display()
 UI.mainloop()
 
