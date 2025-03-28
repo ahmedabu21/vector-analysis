@@ -7,50 +7,69 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,  
 NavigationToolbar2Tk) 
 
+
 UI = Tk()
 UI.title('Vector Analysis!')
-UI.geometry("500x300")
-plot_button = Button(master=UI, height=5,    width=20, text = "plot")
-label1 = Label(master=UI, text='Enter X-Component: ')
-label2 = Label(master=UI, text='Enter Y-Component: ')
-label3 = Label(master=UI, text='Enter Z Component: ')
-name = Entry(UI, width=10, borderwidth=3)
+UI.geometry("500x500")
+plot_button = Button(master=UI, height=5, width=20, text = "plot")
+x_label= Label(master=UI, text='Enter X-Component: ')
+y_label = Label(master=UI, text='Enter Y-Component: ')
+z_label = Label(master=UI, text='Enter Z Component: ')
+x_entry = Entry(UI, width=10, borderwidth=3)
+y_entry = Entry(UI, width=10, borderwidth=3)
+z_entry = Entry(UI, width=10, borderwidth=3)
+x_label.grid(row=0, column=0, padx=5)
+x_entry.grid(row=0, column=1, padx=5)
+y_label.grid(row=0, column=2, padx=5)
+y_entry.grid(row=0, column=3, padx=5)
+z_label.grid(row=0, column=4, padx=5)
+z_entry.grid(row=0, column=5, padx=5)
+
+
+
 class Vector:
-    def __init__(self, x_component, y_component, z_component):
-        self.x_component = x_component
-        self.y_component = y_component
-        self.z_component = z_component
-        # self.button = Button(master=UI,height=5, width=20, text="Plot")
-        # self.label1 = Label(master=UI, text='Enter X-Component: ')
-        # self.label2 = Label(master=UI, text='Enter Y-Component: ')
-        # self.label3 = Label(master=UI, text='Enter Z Component: ')
-    
-    def display(self):
-       fig = plt.figure()
-       vector_plot = fig.add_subplot(111, projection='3d')  # this line just enables 3D plotting
-       vector_plot.plot(self.x_component, self.y_component, self.z_component, c='r', marker='o')
-       vector_plot.set_xlabel('X Component')
-       vector_plot.set_ylabel('Y Component')
-       vector_plot.set_zlabel('Z Component')
-       plt.show()
-
-       canvas = FigureCanvasTkAgg(fig, master = UI)
-       canvas.draw()
-       canvas.get_tk_widget().pack() 
-       
+    def __init__(self):
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.vector_plot = self.fig.add_subplot(111, projection='3d')
         
-x_component = float(input("Enter direction x component: "))
-y_component = float(input("Enter direction y component: "))
-z_component = float(input("Enter direction z component: "))        
-v1 = Vector(x_component, y_component, z_component)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=UI)
+        self.canvas.get_tk_widget().grid(row=1, column=0, columnspan=6, pady=20)    # Move plot below inputs
 
-plot_button.pack()
-label1.place(x=75, y=260)
-name.place(x=125, y=260)
+    def display(self):
+        try:
+            x_component = float(x_entry.get())
+            y_component = float(y_entry.get())
+            z_component = float(z_entry.get())
+        except ValueError:
+            print("Invalid input! Please enter numeric values.")
+            return
 
-label2.pack()
-label3.pack()
-v1.display()
+    # Clear previous figure memory usage
+        plt.close('all')
+
+    # Clear the previous plot
+        self.vector_plot.clear()
+    
+    # Plot the vector
+        self.vector_plot.quiver(0, 0, 0, x_component, y_component, z_component, color='r', arrow_length_ratio=0.1)
+    
+    # Label axes
+        self.vector_plot.set_xlabel('X Component')
+        self.vector_plot.set_ylabel('Y Component')
+        self.vector_plot.set_zlabel('Z Component')
+
+    # Redraw the canvas
+        self.canvas.draw()
+
+        
+       
+vector_instance = Vector()
+plot_button = Button(master=UI, text="Plot", height=2, width=10, command=vector_instance.display)
+plot_button.grid(row=1, column=0, columnspan=6, pady=20)  
+
+
+
+
 UI.mainloop()
 
     
