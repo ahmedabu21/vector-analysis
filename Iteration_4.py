@@ -1,5 +1,4 @@
 #Created by Karan, Ahmed, Oliee | 2025
-#Iteration #4
 import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import *
@@ -8,25 +7,11 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 NavigationToolbar2Tk) 
 
 
-UI = Tk()
-UI.title('Vector Analysis!')
-UI.geometry("500x500")
-plot_button = Button(master=UI, height=5, width=20, text = "plot")
-x_label= Label(master=UI, text='Enter X-Component: ')
-y_label = Label(master=UI, text='Enter Y-Component: ')
-z_label = Label(master=UI, text='Enter Z-Component: ')
-x_entry = Entry(UI, width=10, borderwidth=3)
-y_entry = Entry(UI, width=10, borderwidth=3)
-z_entry = Entry(UI, width=10, borderwidth=3)
-x_label.grid(row=0, column=0, padx=5)
-x_entry.grid(row=0, column=1, padx=5)
-y_label.grid(row=0, column=2, padx=5)
-y_entry.grid(row=0, column=3, padx=5)
-z_label.grid(row=0, column=4, padx=5)
-z_entry.grid(row=0, column=5, padx=5)
-
-magnitude_label = Label(UI, text='Magnitude: N/A', font=("Arial", 12))
-magnitude_label.grid(row=5, column=0, columnspan=6, pady=5)
+UI = Tk() #establishes UI through tkinter library 
+UI.title('Vector Analysis!') #application name
+UI.geometry("800x800") #changes pizel size of UI
+UI.configure(bg="#f0f0f0") #chnages background color to gray  
+UI.resizable(False, False) #so when application opens it does not let you resize it 
 
 class Vector:
     def __init__(self):
@@ -34,7 +19,9 @@ class Vector:
         self.vector_plot = self.fig.add_subplot(111, projection='3d')
         
         self.canvas = FigureCanvasTkAgg(self.fig, master=UI)
-        self.canvas.get_tk_widget().grid(row=4, column=0, columnspan=6, pady=20)    # Move plot below inputs
+        self.canvas.get_tk_widget().grid(row=5, column=1, columnspan=5, pady=20)    # Move plot below inputs
+    def add_new_vector():
+        pass
     def display(self):
         try:    
           self.x_component = float(x_entry.get())
@@ -44,8 +31,8 @@ class Vector:
           print("Invalid input! Please enter numeric values.")
           return
 
-        self.vector_plot.clear()
-        fig = plt.figure()
+        self.vector_plot.clear() #clears plot
+        
         octants = [
             (1, 1, 1), (-1, 1, 1), (1, -1, 1), (1, 1, -1),
             (-1, -1, 1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)
@@ -58,9 +45,6 @@ class Vector:
             z = np.linspace(0, sign_z * self.z_component, 1)
             self.vector_plot.plot(x, y, z, marker='o')
             
-
-
-
         # YZ plane (x = 0)
         X = np.linspace(-max(abs(self.x_component), abs(self.y_component)), max(abs(self.x_component), abs(self.y_component)), 10)
         Y, Z = np.meshgrid(X, X)
@@ -77,8 +61,7 @@ class Vector:
         self.vector_plot.plot_surface(X, Y, np.zeros_like(X), color='grey', alpha=0.3)  # Adjusted alpha
 
         
-#planes 
-
+        #planes 
         max_value = max(abs(self.x_component), abs(self.y_component), abs(self.z_component))
         self.vector_plot.plot([-max_value, max_value], [0, 0], [0, 0], color='black', lw=2, label='X-Axis')
 
@@ -87,9 +70,7 @@ class Vector:
         self.vector_plot.plot([0, 0], [0, 0], [-max_value, max_value], color='red', lw=2, label='Z-Axis')
         
         
-        
-        
-        
+    
         num_points=10* int(abs(self.x_component) +abs(self.y_component ) + abs(self.z_component))
         
         x = np.linspace(0, self.x_component, num_points)
@@ -103,12 +84,6 @@ class Vector:
         
         
         self.vector_plot.plot(x2,y2,z2, c='b', marker='o', label='-vector')
-        
-        
-        
-        
-        
-
         
         grid_range = np.linspace(-max_value, max_value, 10)
 
@@ -135,22 +110,46 @@ class Vector:
         return Vector(newX, newY, newZ)
 
         
-       
-vector_instance = Vector()
-
-plot_button = Button(master=UI, text="Plot", height=2, width=10, command=vector_instance.display)
-plot_button.grid(row=1, column=2,  pady=20)  
-addButt = Button(master=UI,text="Add",height=2, width=10, command=vector_instance.addVectors)
-addButt.grid(row=2, column=0, padx=5, pady=5)
-subButt = Button(master=UI,text="Subtract",height=2, width=10)#add command
-subButt.grid(row=2, column=1, padx=5, pady=5)
-dotButt = Button(master=UI,text="Dot Product",height=2, width=10)
-dotButt.grid(row=2, column=2, padx=5, pady=5)
-crossButt = Button(master=UI,text="Cross Product",height=2, width=10)
-crossButt.grid(row=2, column=3, padx=5, pady=5)
+v1 = Vector()
 
 
+title = Label(UI, text="Vector Analysis!", font=("Arial", 18, "bold"), bg="#f0f0f0")
+title.grid(row=0, column=0, columnspan=6, pady=10)
+
+
+x_label = Label(UI, text='X-Component:', font=("Arial", 12), bg="#f0f0f0")
+x_label.grid(row=1, column=0, padx=10, pady=5, sticky="e")
+x_entry = Entry(UI, width=10, font=("Arial", 12), borderwidth=2)
+x_entry.grid(row=1, column=1, padx=10, pady=5)
+
+y_label = Label(UI, text='Y-Component:', font=("Arial", 12), bg="#f0f0f0")
+y_label.grid(row=1, column=2, padx=10, pady=5, sticky="e")
+y_entry = Entry(UI, width=10, font=("Arial", 12), borderwidth=2)
+y_entry.grid(row=1, column=3, padx=10, pady=5)
+
+z_label = Label(UI, text='Z-Component:', font=("Arial", 12), bg="#f0f0f0")
+z_label.grid(row=1, column=4, padx=10, pady=5, sticky="e")
+z_entry = Entry(UI, width=10, font=("Arial", 12), borderwidth=2)
+z_entry.grid(row=1, column=5, padx=10, pady=5)
+
+# Magnitude Label
+magnitude_label = Label(UI, text='Magnitude: N/A', font=("Arial", 14, "bold"), bg="#f0f0f0")
+magnitude_label.grid(row=2, column=0, columnspan=6, pady=10)
+
+# Buttons
+plot_button = Button(UI, text="Plot Vector", font=("Arial", 10, "bold"), bg="#3498db", fg="white", width=12, command=v1.display)
+plot_button.grid(row=3, column=2, columnspan=2, pady=10)
+
+add_button = Button(UI, text="Add", font=("Arial", 10, "bold"), bg="#2ecc71", fg="white", width=12, state=DISABLED)
+add_button.grid(row=4, column=1, padx=5, pady=5)
+
+sub_button = Button(UI, text="Subtract", font=("Arial", 10, "bold"), bg="#e74c3c", fg="white", width=12, state=DISABLED)
+sub_button.grid(row=4, column=2, padx=5, pady=5)
+
+dot_button = Button(UI, text="Dot Product", font=("Arial", 10, "bold"), bg="#f39c12", fg="white", width=12, state=DISABLED)
+dot_button.grid(row=4, column=3, padx=5, pady=5)
+
+cross_button = Button(UI, text="Cross Product", font=("Arial", 10, "bold"), bg="#9b59b6", fg="white", width=12, state=DISABLED)
+cross_button.grid(row=4, column=4, padx=5, pady=5)
 
 UI.mainloop()
-
-    
