@@ -71,8 +71,6 @@ class Vector:
         try:
             v1 = [float(x_entry1.get()), float(y_entry1.get()), float(z_entry1.get())]
             v2 = [float(x_entry2.get()), float(y_entry2.get()), float(z_entry2.get())]
-            if len(v1) != 3 or len(v2) != 3:
-                raise ValueError("Both vectors must have exactly 3 components.")
             self.display(v1, v2)
             return v1, v2
         except ValueError:
@@ -81,28 +79,28 @@ class Vector:
         
     def calculate_addition(self):
         v1, v2 = self.update_vectors()
-        if v1 is not None and v2 is not None:
+        if v1 and v2:
             add = np.add(v1, v2)
             messagebox.showinfo("Addition Result", f"Sum: {add}")
             self.display(v1, v2, add)
 
     def calculate_subtraction(self):
         v1, v2 = self.update_vectors()
-        if v1 is not None and v2 is not None:
+        if v1 and v2:
             diff = np.subtract(v1, v2)
             messagebox.showinfo("Subtraction Result", f"Difference: {diff}")
             self.display(v1, v2, diff)
 
     def calculate_dot_product(self):
         v1, v2 = self.update_vectors()
-        if v1 is not None and v2 is not None:
+        if v1 and v2:
             dot_product = np.dot(v1, v2)
             messagebox.showinfo("Dot Product Result", f"Dot Product: {dot_product}")
 
 
     def calculate_cross_product(self):
         v1, v2 = self.update_vectors()
-        if v1 is not None and v2 is not None:
+        if v1 and v2:
             cross_product = np.cross(v1, v2)
             messagebox.showinfo("Cross Product Result", f"Cross Product: {cross_product}")
             self.display(v1, v2, cross_product)
@@ -118,7 +116,7 @@ plotter = Vector()
 
 
 # Labels and Inputs for Vector 1
-Label(UI, text="Vector 1", font=("Arial", 12, "bold"), bg="#f0f0f0").grid(row=1, column=0, pady=5)
+Label(UI, text="Vector 1", font=("Arial", 12, "bold"), bg="#E8F6F3").grid(row=1, column=0, pady=5)
 x_entry1 = Entry(UI, width=10, font=("Arial", 12), borderwidth=2)
 x_entry1.grid(row=1, column=1, padx=5, pady=5)
 y_entry1 = Entry(UI, width=10, font=("Arial", 12), borderwidth=2)
