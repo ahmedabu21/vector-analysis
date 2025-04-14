@@ -30,7 +30,7 @@ class Vector:
             abs(v1[0]), abs(v1[1]), abs(v1[2]),
             abs(v2[0]), abs(v2[1]), abs(v2[2])
         ) + 1
- 
+ # plots the axis planes. Mostly see through
     
         plane_range = np.linspace(-max_value, max_value, 10)
         # YZ Plane (x = 0)
@@ -50,7 +50,7 @@ class Vector:
         self.vector_plot.set_xlim([-max_value, max_value])
         self.vector_plot.set_ylim([-max_value, max_value])
         self.vector_plot.set_zlim([-max_value, max_value])
-        
+        #plots axes 
         
 
         # Plot Vector A (Red)
@@ -66,7 +66,7 @@ class Vector:
         self.vector_plot.set_zlabel('Z Axis')
         self.vector_plot.legend()
         self.canvas.draw()
-
+#updates vectors using user inputs 
     def update_vectors(self):
         try:
             v1 = [float(x_entry1.get()), float(y_entry1.get()), float(z_entry1.get())]
@@ -74,7 +74,7 @@ class Vector:
             self.display(v1, v2)
             return v1, v2
         except ValueError:
-            messagebox.showinfo(text="Invalid Input! Enter numeric values.")
+            messagebox.showinfo(text="Invalid Input! Enter numeric values.")# ensures correct data type
 
         
     def calculate_addition(self):
@@ -83,28 +83,28 @@ class Vector:
             add = np.add(v1, v2)
             messagebox.showinfo("Addition Result", f"Sum: {add}")
             self.display(v1, v2, add)
-
+#adds vectors and displays results 
     def calculate_subtraction(self):
         v1, v2 = self.update_vectors()
         if v1 and v2:
             diff = np.subtract(v1, v2)
             messagebox.showinfo("Subtraction Result", f"Difference: {diff}")
             self.display(v1, v2, diff)
-
+#subtracts vectors and displays results 
     def calculate_dot_product(self):
         v1, v2 = self.update_vectors()
         if v1 and v2:
             dot_product = np.dot(v1, v2)
             messagebox.showinfo("Dot Product Result", f"Dot Product: {dot_product}")
 
-
+#dots vectors and displays results 
     def calculate_cross_product(self):
         v1, v2 = self.update_vectors()
         if v1 and v2:
             cross_product = np.cross(v1, v2)
             messagebox.showinfo("Cross Product Result", f"Cross Product: {cross_product}")
             self.display(v1, v2, cross_product)
-            
+         #takes cross product of vectors and displays results    
     def show_welcome_message(self):
         messagebox.showinfo(f"Welcome/n", "Welcome to Vector Analysis! Your one-stop shop for all things vectors. Please enter two vectors.")
 
